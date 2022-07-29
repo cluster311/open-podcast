@@ -1,0 +1,22 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Code checks
+      run: |
+        pip install --upgrade pip
+        pip install -r dev-requirements.txt
+        flake8 src --count --statistics
+        flake8 tests --count --statistics
+        black src --check --diff
+        black tests --check --diff
+
+    - name: Run test
+      run: |
+        pip install -e .
+        pytest -vv
