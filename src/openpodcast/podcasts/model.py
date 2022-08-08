@@ -1,31 +1,52 @@
-from openpodcast.exceptions import PodcastDescriptionTooLong
-from openpodcast import settings
+from openpodcast.exceptions import PodcastValidationError
+from openpodcast.podcasts.validate import validate_podcast
 
 
 class Podcast:
-    def __init__(self, title: str = None):
-        if title is not None:
-            self._title = title
-        self._description = ""
-        # self._published = False
-        # self._ttl = 1440
-        # self.language = None  # es en or es-ar en-us
-        # self.country = None
+    def __init__(self, **kwargs):
+        """ Starts a podcasts
+            kwargs allow to fill any properties and settings
+        """
+
+        self.title = kwargs.pop("title", "")
+        self.description = kwargs.pop("description", "")
+        self.url = kwargs.pop("url", None)
+        self.published = kwargs.pop("published", False)
+        # The <ttl> (ttl=time to live) element specifies the number of minutes the
+        # feed can stay cached before refreshing it from the source.
+        self.ttl = kwargs.pop("ttl", 1440)
+        self.language = kwargs.pop("language", "en")
+        self.country = kwargs.pop("country", None)
 
         # create new objects
         self._image = None
         # self.author = None
         # self.publisher = None
 
-    @property
-    def description(self):
-        return self._description
+        self.settings = {
+            "description_max_length": 512,
+            "ttl_max": 1440 * 7,  # one week default
+        }
 
-    @description.setter
-    def description(self, description: str):
-        if len(description) > settings.PODCAST_DESCRITION_MAX_LENGTH:
-            raise PodcastDescriptionTooLong(descr_long=len(description))
-        self._description = description
+        self.settings.update(**kwargs)
+        self.errors = None
+
+    @property
+    def is_valid(self):
+        valid, errors = validate_podcast(self)
+        if not valid:
+            self.errors = errors
+        return valid
+
+    def validate(self):
+        """ Validate all podcasts properties
+            and raise and error if something fails
+        """
+        valid, errors = validate_podcast(self)
+        if not valid:
+            self.errors = errors
+            raise PodcastValidationError(f"Invalid podcast, check <podcast>.errors")
+        return True
 
     @property
     def image(self):

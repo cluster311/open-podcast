@@ -1,6 +1,8 @@
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 from os import path
+from openpodcast import __VERSION__
+
 
 here = path.abspath(path.dirname(__file__))
 
@@ -8,16 +10,17 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
-with open(path.join(here, "src/openpodcast/__init__.py"), encoding="utf-8") as f:
-    init = f.read()
-    for line in init.splitlines():
-        if line.startswith("__VERSION__"):
-            delim = '"' if '"' in line else "'"
-            VERSION = line.split(delim)[1]
+# with open(path.join(here, "src/openpodcast/__init__.py"), encoding="utf-8") as f:
+#     init = f.read()
+#     for line in init.splitlines():
+#         if line.startswith("__VERSION__"):
+#             delim = '"' if '"' in line else "'"
+#             VERSION = line.split(delim)[1]
+
 
 setup(
     name="""openpodcast""",
-    version=VERSION,
+    version=__VERSION__,
     description="""A general open podcasts library""",
     long_description=long_description,
     long_description_content_type="text/markdown",

@@ -13,8 +13,6 @@ jobs:
         pip install -r dev-requirements.txt
         flake8 src --count --statistics
         flake8 tests --count --statistics
-        black src --check --diff
-        black tests --check --diff
 
     - name: Run test
       run: |
