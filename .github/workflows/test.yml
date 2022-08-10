@@ -10,6 +10,7 @@ jobs:
     - name: Code checks
       run: |
         pip install --upgrade pip
+        pip install -r requirements.txt
         pip install -r dev-requirements.txt
         flake8 src --count --statistics
         flake8 tests --count --statistics

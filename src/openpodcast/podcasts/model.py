@@ -25,17 +25,30 @@ class Podcast:
 
         self.settings = {
             "description_max_length": 512,
-            "ttl_max": 1440 * 7,  # one week default
+            "ttl_min": 1440,  # one day default min
+            "ttl_max": 1440 * 7,  # one week default max
         }
 
         self.settings.update(**kwargs)
         self.errors = None
 
     @property
+    def as_dict(self):
+        dct = {
+            "title": self.title,
+            "description": self.description,
+            "url": self.url,
+            "published": self.published,
+            "ttl": self.ttl,
+            "language": self.language,
+            "country": self.country,
+        }
+        return dct
+
+    @property
     def is_valid(self):
         valid, errors = validate_podcast(self)
-        if not valid:
-            self.errors = errors
+        self.errors = errors if not valid else None
         return valid
 
     def validate(self):
@@ -43,9 +56,10 @@ class Podcast:
             and raise and error if something fails
         """
         valid, errors = validate_podcast(self)
+        self.errors = errors if not valid else None
         if not valid:
-            self.errors = errors
             raise PodcastValidationError(f"Invalid podcast, check <podcast>.errors")
+        self.errors = None
         return True
 
     @property
