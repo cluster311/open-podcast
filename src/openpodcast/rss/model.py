@@ -5,10 +5,16 @@ from jinja2 import Environment, FileSystemLoader
 class RSSPodcast:
     def __init__(self, podcast):
         self.podcast = podcast
+        # Use Itunes elements
+        self.use_itunes = True
+        # Use Googleplay elements
+        self.use_google = True
 
     def podcast_data(self):
         """ Transform a Podcast to a dict valid to the RSS template """
         data = {
+            "use_itunes": True,
+            "use_google": True,
             "podcast": self.podcast.as_dict,
             "year": 1988  # TODO current year
         }
