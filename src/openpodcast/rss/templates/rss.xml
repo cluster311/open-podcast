@@ -9,10 +9,10 @@
     xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0"
 >   {% endif %}
 
-<!-- TODO most fields are missing
+{# TODO most fields are missing
    pubDate uses language en for US date formats
    pubDate and lastBuildDate were using |date:"r"
--->
+#}
     <channel>
         <title>{{ podcast.title }}</title>
         <description>{{ podcast.description }}</description>
@@ -26,8 +26,8 @@
             <url>{{ podcast.image_url }}</url>
             <link>{{ podcast.url }}</link>
         </image>
-        <generator>Parlarispa</generator>
-        <copyright>Copyright YEAR {{ podcast.autor.nombre }}</copyright>
+        <generator>{{ generator }} {{ generator_version }}</generator>
+        <copyright>Copyright {{ year }} {{ podcast.autor.nombre }}</copyright>
         <webMaster>{{ podcast.publisher.email }}</webMaster>
         <managingEditor>{{ podcast.autor.email }}</managingEditor>
         

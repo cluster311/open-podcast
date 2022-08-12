@@ -1,5 +1,8 @@
 import os
 from jinja2 import Environment, FileSystemLoader
+from datetime import date
+
+from openpodcast import __VERSION__
 
 
 class RSSPodcast:
@@ -12,11 +15,14 @@ class RSSPodcast:
 
     def podcast_data(self):
         """ Transform a Podcast to a dict valid to the RSS template """
+        current_year = date.today().year
         data = {
-            "use_itunes": True,
-            "use_google": True,
+            "use_itunes": self.use_itunes,
+            "use_google": self.use_google,
             "podcast": self.podcast.as_dict,
-            "year": 1988  # TODO current year
+            "year": current_year,
+            "generator": "Parlarispa",
+            "generator_version": __VERSION__,
         }
         # TODO temp hacks
         data["podcast"]["autor"] = {
@@ -38,3 +44,8 @@ class RSSPodcast:
         template = env.get_template("rss.xml")
         data = self.podcast_data()
         return template.render(data)
+
+    def save(self, path):
+        f = open(path, "w")
+        f.write(self.rss())
+        f.close()

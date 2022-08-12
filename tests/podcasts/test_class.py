@@ -1,5 +1,5 @@
 import pytest
-from openpodcast import Podcast
+from openpodcast.podcasts import Podcast
 from openpodcast.exceptions import PodcastValidationError
 
 
