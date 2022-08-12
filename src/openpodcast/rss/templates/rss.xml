@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss 
+    version="2.0"
+    xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+    xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0"
+>
+
+<!-- TODO most fields are missing
+   pubDate uses language en for US date formats
+   pubDate and lastBuildDate were using |date:"r"
+-->
+    <channel>
+        <title>{{ podcast.title }}</title>
+        <link>{{ podcast.url }}</link>
+        <language>{{ podcast.lenguaje }}</language>
+        <itunes:image href="{{ podcast.image_url }}" />
+        <googleplay:image href='{{ podcast.image_url }}'/>
+        <description>{{ podcast.description }}</description>
+        <googleplay:description>{{ podcast.descripcion }}</googleplay:description>
+        <itunes:summary>{{ podcast.descripcion }}</itunes:summary>
+
+        <ttl>{{ podcast.ttl_minutos }}</ttl>
+        
+        <lastBuildDate>{{ podcast.ultima_compilacion }}</lastBuildDate>
+        
+        <author>{{ podcast.autor.nombre }}</author>
+        <itunes:author>{{ podcast.autor.nombre }}</itunes:author>
+        <googleplay:author>{{ podcast.autor.nombre }}</googleplay:author>
+        <googleplay:email>{{ podcast.publisher.email }}</googleplay:email>
+		
+        <image>
+            <title>{{ podcast.nombre }}</title>
+            <url>{{ podcast.image_url }}</url>
+            <link>{{ podcast.url }}</link>
+        </image>
+        <generator>Parlarispa</generator>
+        <itunes:owner>
+            <itunes:name>{{ podcast.autor.nombre }}</itunes:name>
+            <itunes:email>{{ podcast.autor.email }}</itunes:email>
+        </itunes:owner>
+        <copyright>Copyright YEAR {{ podcast.autor.nombre }}</copyright>
+        <itunes:explicit>No</itunes:explicit>
+        <googleplay:explicit>No</googleplay:explicit>
+        <webMaster>{{ podcast.publisher.email }}</webMaster>
+        <managingEditor>{{ podcast.autor.email }}</managingEditor>
+        {% for category in podcast.categories %}
+        {{ category.to_itunes_rss }}
+        {% endfor %}
+        <!-- <googleplay:category text="CATEGORY NAME HERE"/> -->
+
+        {% if podcast.tags %}
+        <itunes:keywords><![CDATA[{% for tag in podcast.tags %}{{ tag }}{% if not forloop.last %}, {% endif%}{% endfor %}]]></itunes:keywords>
+        {% endif %}
+        {% for item in episodios %}
+        <item>
+            <title>{{ item.nombre }}</title>
+            <itunes:image href="{{ item.image_url }}" />
+            <googleplay:image href='{{ item.image_url }}'/>
+            <itunes:summary><![CDATA[{{ item.final_description|safe }}]]></itunes:summary>
+            <guid isPermaLink="false">{{ item.get_uid }}</guid>
+            <link>{{ item.url }}</link>
+            
+            <pubDate>{{ item.fecha_publicacion }}</pubDate>
+            
+            <author>{{ podcast.autor.nombre }}</author>
+            <description><![CDATA[{{ item.final_description|safe }}]]></description>
+            <googleplay:description><![CDATA[{{ item.final_description|safe }}]]></googleplay:description>
+			<googleplay:author>{{ podcast.autor.nombre }}</googleplay:author>
+			<googleplay:explicit>No</googleplay:explicit>
+
+            <enclosure url="{{ item.audio_url_with_identifiers }}" length="{{ item.audio_size_bytes }}" type="audio/mpeg"/>
+
+            <image>
+                <title>{{ item.nombre }}</title>
+                <url>{{ item.image_url }}</url>
+                <link>{{ item.image_url }}</link>
+            </image>
+
+        </item>
+        {% endfor %}
+
+    </channel>
+</rss>

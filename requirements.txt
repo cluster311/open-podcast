@@ -6,5 +6,9 @@
 #
 contextlib2==21.6.0
     # via schema
+jinja2==3.1.2
+    # via -r requirements.in
+markupsafe==2.1.1
+    # via jinja2
 schema==0.7.5
     # via -r requirements.in
