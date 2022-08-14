@@ -1,3 +1,4 @@
+import logging
 import os
 from jinja2 import Environment, FileSystemLoader
 from datetime import date
@@ -5,9 +6,13 @@ from datetime import date
 from openpodcast import __VERSION__
 
 
+logger = logging.getLogger(__name__)
+
+
 class RSSPodcast:
     def __init__(self, podcast):
         self.podcast = podcast
+        logger.info(f'Creating RSSPodcast {self.podcast.title}')
         # Use Itunes elements
         self.use_itunes = True
         # Use Googleplay elements
@@ -19,17 +24,17 @@ class RSSPodcast:
         data = {
             "use_itunes": self.use_itunes,
             "use_google": self.use_google,
-            "podcast": self.podcast.as_dict,
+            "podcast": self.podcast,
             "year": current_year,
             "generator": "Parlarispa",
             "generator_version": __VERSION__,
         }
         # TODO temp hacks
-        data["podcast"]["autor"] = {
+        data["podcast"].autor = {
             "nombre": "TODO",
             "email": "todo@todo.com"
         }
-        data["podcast"]["publisher"] = {
+        data["podcast"].publisher = {
             "nombre": "TODO",
             "email": "todo@todo.com"
         }

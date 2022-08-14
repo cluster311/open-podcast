@@ -59,14 +59,14 @@
         {% endif %}
         
 
-        {% for item in episodios %}
+        {% for item in podcast.get_episodes() %}
         <item>
-            <title>{{ item.nombre }}</title>
+            <title>{{ item.title }}</title>
             <guid isPermaLink="false">{{ item.get_uid }}</guid>
             <link>{{ item.url }}</link>
             <pubDate>{{ item.fecha_publicacion }}</pubDate>
             <author>{{ podcast.autor.nombre }}</author>
-            <description><![CDATA[{{ item.final_description|safe }}]]></description>
+            <description><![CDATA[{{ item.description|safe }}]]></description>
             <enclosure url="{{ item.audio_url_with_identifiers }}" length="{{ item.audio_size_bytes }}" type="audio/mpeg"/>
             <image>
                 <title>{{ item.nombre }}</title>
@@ -76,12 +76,12 @@
             
             {% if use_itunes %}
                 <itunes:image href="{{ item.image_url }}" />
-                <itunes:summary><![CDATA[{{ item.final_description|safe }}]]></itunes:summary>
+                <itunes:summary><![CDATA[{{ item.description|safe }}]]></itunes:summary>
             {% endif %}
 
             {% if use_google %}
                 <googleplay:image href='{{ item.image_url }}'/>            
-                <googleplay:description><![CDATA[{{ item.final_description|safe }}]]></googleplay:description>
+                <googleplay:description><![CDATA[{{ item.description|safe }}]]></googleplay:description>
                 <googleplay:author>{{ podcast.autor.nombre }}</googleplay:author>
                 <googleplay:explicit>No</googleplay:explicit>
             {% endif %}

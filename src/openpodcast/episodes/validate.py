@@ -1,34 +1,19 @@
 from schema import Schema, And, Use, Or, SchemaError
 
 
-def validate_podcast(podcast):
-    """ Validate all fields and settings """
-    data = [podcast.as_dict]  # Schema require a list of elements to validate
+def validate_episode(episode):
+    """ Validate all fields """
+    podcast = episode.podcast
+    data = [episode.as_dict]  # Schema require a list of elements to validate
     settings = podcast.settings.copy()
 
     schema = Schema([
         {
+            'podcast': dict,
             'title': And(str, len),
             'description':  And(
                 str,
                 lambda n: len(n) < settings['description_max_length']
-            ),
-            'ttl':  And(
-                int,
-                lambda n: settings['ttl_min'] <= n <= settings['ttl_max']
-            ),
-            'country': Or(
-                None,
-                And(
-                    str,
-                    Use(str.lower),
-                    lambda s: s in ('ar', 'us')
-                )
-            ),
-            'language': And(
-                str,
-                Use(str.lower),
-                lambda s: s in ('en', 'es')
             ),
             'published': bool,
             'url': Or(
@@ -39,7 +24,6 @@ def validate_podcast(podcast):
                     lambda s: s.startswith('http')
                 )
             ),
-            'episodes': list,
         }
     ])
     errors = None
