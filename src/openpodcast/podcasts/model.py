@@ -82,7 +82,7 @@ class Podcast:
         self.errors = errors if not valid else None
         if not valid:
             raise PodcastValidationError(f"Invalid podcast, check <podcast>.errors")
-        self.errors = None
+
         return True
 
     @property
@@ -93,6 +93,10 @@ class Podcast:
     def image(self, image):
         """Image setter
         TODO validate, save locally, set up real path
-        TODO allow plugins to publish this to S3, GCD, etc
+        TODO allow plugins to publish this to S3, GCS, etc
         """
         self._image = image
+
+    def publish(self):
+        """ Publish the podcast as static site """
+        pass
